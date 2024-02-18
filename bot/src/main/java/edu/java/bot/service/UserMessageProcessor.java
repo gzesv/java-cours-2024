@@ -1,4 +1,4 @@
-package edu.java.bot;
+package edu.java.bot.service;
 
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -6,10 +6,10 @@ import edu.java.bot.command.Command;
 import java.util.List;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import static edu.java.bot.utils.MessageUtils.getCommandFromMessage;
 
-@Component
+@Service
 @Data
 public class UserMessageProcessor {
     private final List<? extends Command> commands;

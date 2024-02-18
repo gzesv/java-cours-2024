@@ -10,6 +10,7 @@ import com.pengrad.telegrambot.response.BaseResponse;
 import edu.java.bot.command.Command;
 import edu.java.bot.configuration.ApplicationConfig;
 import java.util.List;
+import edu.java.bot.service.UserMessageProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.event.EventListener;
