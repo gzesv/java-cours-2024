@@ -10,8 +10,8 @@ import static edu.java.bot.utils.MessageUtils.messageHasLink;
 
 @Component
 public class UntrackCommand implements Command {
-    public static final String COMMAND = "/untrack";
-    public static final String DESCRIPTION = "Прекратить отслеживание ссылки.";
+    private static final String COMMAND = "/untrack";
+    private static final String DESCRIPTION = "Прекратить отслеживание ссылки.";
     private static final String MESSAGE = "Cсылка больше не отслеживается.";
     private static final String ERROR_MESSAGE = "Сообщение не содержит ссылку.";
     private final LinkRepository linkRepository;

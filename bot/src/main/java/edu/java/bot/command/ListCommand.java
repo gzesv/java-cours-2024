@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ListCommand implements Command {
-    public static final String COMMAND = "/list";
-    public static final String DESCRIPTION = "Показать список отслеживаемых ссылок.";
+    private static final String COMMAND = "/list";
+    private static final String DESCRIPTION = "Показать список отслеживаемых ссылок.";
     private static final String MESSAGE = "Список отслеживаемых ссылок:";
     private static final String LINK_LIST_EMPTY = "Список отслеживаемых ссылок пуст.";
     private final LinkRepository linkRepository;

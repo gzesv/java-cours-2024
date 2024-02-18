@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HelpCommand implements Command {
     private static final String COMMAND = "/help";
-    public static final String DESCRIPTION = "Вывести список команд.";
+    private static final String DESCRIPTION = "Вывести список команд.";
     private static final String MESSAGE = "Список команд:\n";
     private final List<Command> commands;
 

@@ -10,8 +10,8 @@ import static edu.java.bot.utils.MessageUtils.messageHasLink;
 
 @Component
 public class TrackCommand implements Command {
-    public static final String COMMAND = "/track";
-    public static final String DESCRIPTION = "Начать отслеживание ссылки.";
+    private static final String COMMAND = "/track";
+    private static final String DESCRIPTION = "Начать отслеживание ссылки.";
     private static final String MESSAGE = "Cсылка добавлена в список отслеживаемых ссылок.";
     private static final String ERROR_MESSAGE = "Сообщение не содержит ссылку.";
     private final LinkRepository linkRepository;

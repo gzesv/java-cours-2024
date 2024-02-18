@@ -6,9 +6,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StartCommand implements Command {
-    public static final String COMMAND = "/start";
-    public static final String DESCRIPTION = "Зарегистрировать пользователя";
-    public static final String MESSAGE = "Вы зарегистрированы."
+    private static final String COMMAND = "/start";
+    private static final String DESCRIPTION = "Зарегистрировать пользователя";
+    private static final String MESSAGE = "Вы зарегистрированы."
         + " Используйте /help для получения информации о командах.";
 
     @Override
