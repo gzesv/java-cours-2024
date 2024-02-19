@@ -1,15 +1,11 @@
 package edu.java.bot.command;
 
-import com.pengrad.telegrambot.model.Chat;
-import com.pengrad.telegrambot.model.Message;
-import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import edu.java.bot.repository.LinkRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static edu.java.bot.Utils.makeMockUpdate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 class ListCommandTest {
     LinkRepository linkRepository = new LinkRepository();
@@ -17,7 +13,17 @@ class ListCommandTest {
 
     @BeforeEach
     void setUp() {
-        listCommand  = new ListCommand(linkRepository);
+        listCommand = new ListCommand(linkRepository);
+    }
+
+    @Test
+    void commandTest() {
+        assertThat(listCommand.command()).isNotNull();
+    }
+
+    @Test
+    void descriptionTest() {
+        assertThat(listCommand.description()).isNotNull();
     }
 
     @Test
@@ -38,16 +44,4 @@ class ListCommandTest {
             .isEqualTo("Список отслеживаемых ссылок:" + "\n/link");
     }
 
-    public static Update makeMockUpdate() {
-        var chatMock = mock(Chat.class);
-        when(chatMock.id()).thenReturn(1L);
-
-        var messageMock = mock(Message.class);
-        when(messageMock.chat()).thenReturn(chatMock);
-
-        var updateMock = mock(Update.class);
-        when(updateMock.message()).thenReturn(messageMock);
-
-        return updateMock;
-    }
 }
