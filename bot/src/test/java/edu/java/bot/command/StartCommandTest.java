@@ -1,7 +1,9 @@
 package edu.java.bot.command;
 
+import com.pengrad.telegrambot.request.SendMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static edu.java.bot.Utils.makeMockUpdate;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 class StartCommandTest {
@@ -15,7 +17,7 @@ class StartCommandTest {
 
     @Test
     void commandTest() {
-        assertThat(startCommand.description()).isNotNull();
+        assertThat(startCommand.command()).isNotNull();
     }
 
     @Test
@@ -25,6 +27,10 @@ class StartCommandTest {
 
     @Test
     void handleTest() {
-        assertThat(startCommand.description()).isNotNull();
+        SendMessage sendMessage = startCommand.handle(makeMockUpdate());
+
+        assertThat(sendMessage.getParameters().get("text"))
+            .isEqualTo("Вы зарегистрированы."
+                + " Используйте /help для получения информации о командах.");
     }
 }
