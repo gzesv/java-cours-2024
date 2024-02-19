@@ -36,7 +36,7 @@ class ListCommandTest {
 
     @Test
     void linkListIsNotEmptyTest() {
-        linkRepository.addLink(1L, "/link");
+        linkRepository.addLink(123L, "/link");
 
         SendMessage sendMessage = listCommand.handle(makeMockUpdate());
 
