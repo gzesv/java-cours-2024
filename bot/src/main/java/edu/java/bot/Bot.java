@@ -10,10 +10,9 @@ import com.pengrad.telegrambot.response.BaseResponse;
 import edu.java.bot.command.Command;
 import edu.java.bot.configuration.ApplicationConfig;
 import edu.java.bot.service.UserMessageProcessor;
+import jakarta.annotation.PostConstruct;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationReadyEvent;
-import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +25,21 @@ public class Bot implements UpdatesListener, AutoCloseable {
     public Bot(UserMessageProcessor userMessageProcessor, ApplicationConfig applicationConfig) {
         this.userMessageProcessor = userMessageProcessor;
         this.applicationConfig = applicationConfig;
+    }
+
+    @PostConstruct()
+    public void start() {
+        bot = new TelegramBot(applicationConfig.telegramToken());
+        bot.setUpdatesListener(this);
+
+        SetMyCommands setMyCommands =
+            new SetMyCommands(
+                userMessageProcessor.getCommands()
+                    .stream()
+                    .map(Command::toApiCommand)
+                    .toArray(BotCommand[]::new)
+            );
+        execute(setMyCommands);
     }
 
     <T extends BaseRequest<T, R>, R extends BaseResponse> void execute(BaseRequest<T, R> request) {
@@ -42,21 +56,6 @@ public class Bot implements UpdatesListener, AutoCloseable {
         }
 
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
-    }
-
-    @EventListener(ApplicationReadyEvent.class)
-    public void start() {
-        bot = new TelegramBot(applicationConfig.telegramToken());
-        bot.setUpdatesListener(this);
-
-        SetMyCommands setMyCommands =
-            new SetMyCommands(
-                userMessageProcessor.getCommands()
-                    .stream()
-                    .map(Command::toApiCommand)
-                    .toArray(BotCommand[]::new)
-            );
-        execute(setMyCommands);
     }
 
     @Override

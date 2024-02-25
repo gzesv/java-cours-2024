@@ -22,16 +22,6 @@ public class UntrackCommand implements Command {
     }
 
     @Override
-    public String command() {
-        return COMMAND;
-    }
-
-    @Override
-    public String description() {
-        return DESCRIPTION;
-    }
-
-    @Override
     public SendMessage handle(Update update) {
         Long chatId = update.message().chat().id();
 
@@ -44,4 +34,15 @@ public class UntrackCommand implements Command {
 
         return new SendMessage(chatId, MESSAGE);
     }
+
+    @Override
+    public String command() {
+        return COMMAND;
+    }
+
+    @Override
+    public String description() {
+        return DESCRIPTION;
+    }
+
 }

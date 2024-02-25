@@ -21,16 +21,6 @@ public class ListCommand implements Command {
     }
 
     @Override
-    public String command() {
-        return COMMAND;
-    }
-
-    @Override
-    public String description() {
-        return DESCRIPTION;
-    }
-
-    @Override
     public SendMessage handle(Update update) {
         Long chatId = update.message().chat().id();
 
@@ -46,5 +36,15 @@ public class ListCommand implements Command {
         }
 
         return new SendMessage(chatId, message.toString());
+    }
+
+    @Override
+    public String command() {
+        return COMMAND;
+    }
+
+    @Override
+    public String description() {
+        return DESCRIPTION;
     }
 }

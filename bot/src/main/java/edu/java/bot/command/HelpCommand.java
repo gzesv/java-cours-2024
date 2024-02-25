@@ -19,16 +19,6 @@ public class HelpCommand implements Command {
     }
 
     @Override
-    public String command() {
-        return COMMAND;
-    }
-
-    @Override
-    public String description() {
-        return DESCRIPTION;
-    }
-
-    @Override
     public SendMessage handle(Update update) {
         StringBuilder botMessage = new StringBuilder();
         botMessage.append(MESSAGE);
@@ -41,4 +31,15 @@ public class HelpCommand implements Command {
 
         return new SendMessage(update.message().chat().id(), botMessage.toString());
     }
+
+    @Override
+    public String command() {
+        return COMMAND;
+    }
+
+    @Override
+    public String description() {
+        return DESCRIPTION;
+    }
+
 }

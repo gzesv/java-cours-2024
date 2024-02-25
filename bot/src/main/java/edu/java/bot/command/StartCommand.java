@@ -12,6 +12,11 @@ public class StartCommand implements Command {
         + " Используйте /help для получения информации о командах.";
 
     @Override
+    public SendMessage handle(Update update) {
+        return new SendMessage(update.message().chat().id(), MESSAGE);
+    }
+
+    @Override
     public String command() {
         return COMMAND;
     }
@@ -21,8 +26,4 @@ public class StartCommand implements Command {
         return DESCRIPTION;
     }
 
-    @Override
-    public SendMessage handle(Update update) {
-        return new SendMessage(update.message().chat().id(), MESSAGE);
-    }
 }

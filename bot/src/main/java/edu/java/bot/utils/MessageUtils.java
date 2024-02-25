@@ -1,6 +1,8 @@
 package edu.java.bot.utils;
 
-@SuppressWarnings("HideUtilityClassConstructor")
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class MessageUtils {
     public static String getCommandFromMessage(String message) {
         return message.split(" ")[0];
