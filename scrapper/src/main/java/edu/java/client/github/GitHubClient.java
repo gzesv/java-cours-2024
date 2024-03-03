@@ -1,4 +1,4 @@
-package edu.java.client;
+package edu.java.client.github;
 
 import edu.java.dto.github.RepositoryResponse;
 

@@ -1,7 +1,8 @@
-package edu.java.client.impl;
+package edu.java.client;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
-import edu.java.dto.github.RepositoryResponse;
+import edu.java.client.stackoverflow.StackOverflowWebClient;
+import edu.java.dto.stackoverflow.QuestionResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,21 +12,19 @@ import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class GitHubWebClientTest {
+class StackOverflowWebClientTest {
     private WireMockServer wireMockServer;
 
-    private GitHubWebClient gitHubWebClient;
+    private StackOverflowWebClient stackOverflowWebClient;
 
-    private static final String repositoryName = "java-cours-2024";
-
-    private static final String userName = "gzesv";
+    private static final Long questionId = 75634833L;
 
     @BeforeEach
     void setUp() {
         wireMockServer = new WireMockServer();
         wireMockServer.start();
 
-        gitHubWebClient = new GitHubWebClient(
+        stackOverflowWebClient = new StackOverflowWebClient(
             "http://localhost:" + wireMockServer.port());
     }
 
@@ -37,34 +36,32 @@ class GitHubWebClientTest {
     @Test
     void repositoryInfoTest() {
         wireMockServer
-            .stubFor(get("/repos/gzesv/java-cours-2024")
+            .stubFor(get("/questions/75634833?site=stackoverflow")
                 .willReturn(aResponse()
                     .withStatus(200)
                     .withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                     .withBody(getResponseBody())));
 
-        RepositoryResponse response = gitHubWebClient.fetchRepository(userName, repositoryName);
+        QuestionResponse response = stackOverflowWebClient.fetchQuestion(questionId);
 
-        assertThat(response.id())
-            .isEqualTo(759342600L);
-        assertThat(response.owner().login())
-            .isEqualTo(userName);
-        assertThat(response.repositoryName())
-            .isEqualTo(repositoryName);
+        assertThat(response.items().getFirst().id())
+            .isEqualTo(questionId);
     }
 
     static String getResponseBody() {
         return """
             {
-                "id": "759342600",
-                "name": "java-cours-2024",
-                "owner": {
-                    "login": "gzesv",
-                    "id": "126079469"
-                },
-                "created_at": "2024-02-18T10:26:42Z",
-                "updated_at": "2024-02-18T10:31:55Z",
-                "pushed_at": "2024-02-25T10:35:17Z"
+                "items": [
+                    {
+                        "owner": {
+                            "display_name": "LenaHm"
+                        },
+                        "view_count": 629,
+                        "answer_count": 1,
+                        "last_activity_date": 1677946516,
+                        "question_id": 75634833
+                    }
+                ]
             }
             """;
     }
