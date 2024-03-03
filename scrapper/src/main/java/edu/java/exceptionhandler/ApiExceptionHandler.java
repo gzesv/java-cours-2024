@@ -1,7 +1,7 @@
 package edu.java.exceptionhandler;
 
 import edu.java.dto.Response.ApiErrorResponse;
-import edu.java.exception.ChatAlreadyRegisteredException;
+import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.exception.LinkAlreadyExistsException;
 import java.util.Arrays;
@@ -28,8 +28,8 @@ public class ApiExceptionHandler {
                 .build());
     }
 
-    @ExceptionHandler(ChatAlreadyRegisteredException.class)
-    public ResponseEntity<ApiErrorResponse> chatAlreadyExistsException(ChatAlreadyRegisteredException exception) {
+    @ExceptionHandler(ChatAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> chatAlreadyExistsException(ChatAlreadyExistsException exception) {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(ApiErrorResponse.builder()
