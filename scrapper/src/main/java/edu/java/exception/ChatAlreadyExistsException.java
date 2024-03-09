@@ -1,3 +1,3 @@
 package edu.java.exception;
 
-public class ChatAlreadyExistsException extends Exception { }
+public class ChatAlreadyExistsException extends RuntimeException { }

@@ -10,13 +10,17 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ClientConfiguration {
 
+    private String gitHubBaseUrl;
+
+    private String stackOverflowBaseUrl;
+
     @Bean
-    public StackOverflowClient stackOverflowClient(ApplicationConfig applicationConfig) {
-        return new StackOverflowWebClient(applicationConfig.clientBaseUrl().stackoverflowUrl());
+    public GitHubClient gitHubWebClient() {
+        return new GitHubWebClient(gitHubBaseUrl);
     }
 
     @Bean
-    public GitHubClient gitHubClient(ApplicationConfig applicationConfig) {
-        return new GitHubWebClient(applicationConfig.clientBaseUrl().githubUrl());
+    public StackOverflowClient stackOverflowWebClient() {
+        return new StackOverflowWebClient(stackOverflowBaseUrl);
     }
 }

@@ -1,4 +1,4 @@
-package edu.java.bot.dto.Request;
+package edu.java.dto.request;
 
 public record AddLinkRequest(
     String link

@@ -1,9 +1,9 @@
 package edu.java.bot.client;
 
-import edu.java.bot.dto.Request.AddLinkRequest;
-import edu.java.bot.dto.Request.RemoveLinkRequest;
-import edu.java.bot.dto.Response.LinkResponse;
-import edu.java.bot.dto.Response.ListLinksResponse;
+import edu.java.bot.dto.request.AddLinkRequest;
+import edu.java.bot.dto.request.RemoveLinkRequest;
+import edu.java.bot.dto.response.LinkResponse;
+import edu.java.bot.dto.response.ListLinksResponse;
 
 public interface ScrapperClient {
     ListLinksResponse getLinks(Long tgChatId);
@@ -12,7 +12,7 @@ public interface ScrapperClient {
 
     LinkResponse untrackLink(Long tgChatId, RemoveLinkRequest removeLinkRequest);
 
-    void addChat(Long id);
+    String addChat(Long id);
 
-    void deleteChat(Long id);
+    String deleteChat(Long id);
 }

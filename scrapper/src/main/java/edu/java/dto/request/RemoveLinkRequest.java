@@ -1,4 +1,4 @@
-package edu.java.dto.Request;
+package edu.java.dto.request;
 
 public record RemoveLinkRequest(
     String link

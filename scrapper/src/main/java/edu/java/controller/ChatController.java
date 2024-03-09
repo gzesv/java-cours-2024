@@ -1,6 +1,6 @@
 package edu.java.controller;
 
-import edu.java.dto.Response.ApiErrorResponse;
+import edu.java.dto.response.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

@@ -1,9 +1,9 @@
 package edu.java.bot.client;
 
-import edu.java.bot.dto.Request.AddLinkRequest;
-import edu.java.bot.dto.Request.RemoveLinkRequest;
-import edu.java.bot.dto.Response.LinkResponse;
-import edu.java.bot.dto.Response.ListLinksResponse;
+import edu.java.bot.dto.request.AddLinkRequest;
+import edu.java.bot.dto.request.RemoveLinkRequest;
+import edu.java.bot.dto.response.LinkResponse;
+import edu.java.bot.dto.response.ListLinksResponse;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -55,20 +55,20 @@ public class ScrapperWebClient implements ScrapperClient {
     }
 
     @Override
-    public void addChat(Long id) {
-        webClient.post()
+    public String addChat(Long id) {
+        return webClient.post()
             .uri(TG_CHAT_ENDPOINT, id)
             .retrieve()
-            .bodyToMono(Void.class)
+            .bodyToMono(String.class)
             .block();
     }
 
     @Override
-    public void deleteChat(Long id) {
-        webClient.delete()
+    public String deleteChat(Long id) {
+        return webClient.delete()
             .uri(TG_CHAT_ENDPOINT, id)
             .retrieve()
-            .bodyToMono(Void.class)
+            .bodyToMono(String.class)
             .block();
     }
 }

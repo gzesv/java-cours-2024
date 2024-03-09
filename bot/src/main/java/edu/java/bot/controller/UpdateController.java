@@ -1,7 +1,7 @@
 package edu.java.bot.controller;
 
-import edu.java.bot.dto.Request.LinkUpdateRequest;
-import edu.java.bot.dto.Response.ApiErrorResponse;
+import edu.java.bot.dto.request.LinkUpdateRequest;
+import edu.java.bot.dto.response.ApiErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -34,7 +34,7 @@ public class UpdateController {
         }
     )
     @PostMapping("/updates")
-    public ResponseEntity<Void> handleUpdate(
+    public ResponseEntity<String> handleUpdate(
         @RequestBody @Valid LinkUpdateRequest request
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);

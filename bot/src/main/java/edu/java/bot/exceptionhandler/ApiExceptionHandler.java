@@ -1,6 +1,6 @@
 package edu.java.bot.exceptionhandler;
 
-import edu.java.bot.dto.Response.ApiErrorResponse;
+import edu.java.bot.dto.response.ApiErrorResponse;
 import java.util.Arrays;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

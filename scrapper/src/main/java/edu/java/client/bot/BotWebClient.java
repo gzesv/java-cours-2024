@@ -1,6 +1,6 @@
 package edu.java.client.bot;
 
-import edu.java.dto.Request.LinkUpdateRequest;
+import edu.java.dto.request.LinkUpdateRequest;
 import org.springframework.web.reactive.function.client.WebClient;
 
 public class BotWebClient implements BotClient {
@@ -17,12 +17,12 @@ public class BotWebClient implements BotClient {
     }
 
     @Override
-    public void sendUpdate(LinkUpdateRequest linkUpdateRequest) {
-        webClient.post()
+    public String sendUpdate(LinkUpdateRequest linkUpdateRequest) {
+        return webClient.post()
             .uri(UPDATES_ENDPOINT)
             .bodyValue(linkUpdateRequest)
             .retrieve()
-            .bodyToMono(Void.class)
+            .bodyToMono(String.class)
             .block();
     }
 }

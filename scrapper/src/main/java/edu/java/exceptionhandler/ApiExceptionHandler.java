@@ -1,6 +1,6 @@
 package edu.java.exceptionhandler;
 
-import edu.java.dto.Response.ApiErrorResponse;
+import edu.java.dto.response.ApiErrorResponse;
 import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.exception.LinkAlreadyExistsException;
