@@ -1,22 +1,26 @@
 package edu.java.configuration;
 
-import edu.java.client.GitHubClient;
-import edu.java.client.StackOverflowClient;
-import edu.java.client.impl.GitHubWebClient;
-import edu.java.client.impl.StackOverflowWebClient;
+import edu.java.client.github.GitHubClient;
+import edu.java.client.github.GitHubWebClient;
+import edu.java.client.stackoverflow.StackOverflowClient;
+import edu.java.client.stackoverflow.StackOverflowWebClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ClientConfiguration {
 
+    private String gitHubBaseUrl;
+
+    private String stackOverflowBaseUrl;
+
     @Bean
-    public StackOverflowClient stackOverflowClient(ApplicationConfig applicationConfig) {
-        return new StackOverflowWebClient(applicationConfig.clientBaseUrl().stackoverflowUrl());
+    public GitHubClient gitHubWebClient() {
+        return new GitHubWebClient(gitHubBaseUrl);
     }
 
     @Bean
-    public GitHubClient gitHubClient(ApplicationConfig applicationConfig) {
-        return new GitHubWebClient(applicationConfig.clientBaseUrl().githubUrl());
+    public StackOverflowClient stackOverflowWebClient() {
+        return new StackOverflowWebClient(stackOverflowBaseUrl);
     }
 }
