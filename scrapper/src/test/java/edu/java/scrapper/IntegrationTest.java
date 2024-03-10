@@ -1,5 +1,6 @@
 package edu.java.scrapper;
 
+import java.io.File;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import liquibase.Liquibase;
@@ -13,7 +14,6 @@ import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.JdbcDatabaseContainer;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import java.io.File;
 
 @Testcontainers
 public abstract class IntegrationTest {
@@ -32,7 +32,7 @@ public abstract class IntegrationTest {
     @SneakyThrows
     private static void runMigrations(JdbcDatabaseContainer<?> c) {
         Database database = DatabaseFactory.getInstance()
-                .findCorrectDatabaseImplementation(new JdbcConnection(c.createConnection("")));
+            .findCorrectDatabaseImplementation(new JdbcConnection(c.createConnection("")));
 
         var changelogPath = new File(".").toPath()
             .toAbsolutePath()
@@ -41,7 +41,8 @@ public abstract class IntegrationTest {
             .resolve("migrations");
 
         var liquibase = new Liquibase("master.xml",
-            new DirectoryResourceAccessor(changelogPath), database);
+            new DirectoryResourceAccessor(changelogPath), database
+        );
 
         liquibase.update(new Contexts(), new LabelExpression());
     }
