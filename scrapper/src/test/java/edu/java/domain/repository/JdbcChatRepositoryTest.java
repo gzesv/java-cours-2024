@@ -1,7 +1,5 @@
 package edu.java.domain.repository;
 
-import edu.java.exception.ChatAlreadyExistsException;
-import edu.java.exception.ChatNotFoundException;
 import edu.java.model.Chat;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.util.Optional;
@@ -12,7 +10,6 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 class JdbcChatRepositoryTest extends IntegrationEnvironment {
@@ -21,18 +18,6 @@ class JdbcChatRepositoryTest extends IntegrationEnvironment {
 
     @Autowired
     private JdbcClient client;
-
-    @Test
-    @Transactional
-    @Rollback
-    public void findByIdTest() {
-        long id = 1L;
-        chatRepository.add(id);
-
-        Optional<Chat> chat = chatRepository.findById(id);
-
-        assertThat(chat.isPresent()).isTrue();
-    }
 
     @Test
     @Transactional

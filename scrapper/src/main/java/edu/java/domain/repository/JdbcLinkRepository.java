@@ -26,7 +26,7 @@ public class JdbcLinkRepository implements LinkRepository {
     private static final String DELETE_FROM_LINK = "DELETE FROM link WHERE id = ?";
 
     private static final String ALL_OUTDATED_LINKS
-        = "SELECT * FROM Link WHERE EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - last_check_time)) >= ?";
+        = "SELECT * FROM link WHERE EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - last_check_time)) >= ?";
 
     private static final String UPDATE_LINK
         = "UPDATE Link SET updated_at = ?, checked_at = ? WHERE id = ?";

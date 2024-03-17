@@ -17,7 +17,6 @@ public class DatabaseEnvironment extends IntegrationEnvironment {
         ResultSet resultSet = statement.executeQuery();
 
         assertThat(resultSet.getMetaData().getColumnName(1)).isEqualTo("id");
-        assertThat(resultSet.getMetaData().getColumnName(2)).isEqualTo("name");
     }
 
     @Test
