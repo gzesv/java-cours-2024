@@ -1,6 +1,7 @@
 package edu.java.domain.repository;
 
 import edu.java.exception.ChatAlreadyExistsException;
+import edu.java.exception.ChatNotFoundException;
 import edu.java.model.Chat;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.util.Optional;
@@ -80,9 +81,9 @@ class JdbcChatRepositoryTest extends IntegrationEnvironment {
     @Transactional
     @Rollback
     public void removeWhenChatNotFoundTest() {
-        long chatId = 1L;
+        long chatId = 111L;
 
-        assertThrows(ChatAlreadyExistsException.class, () -> chatRepository.remove(chatId));
+        assertThrows(ChatNotFoundException.class, () -> chatRepository.remove(chatId));
     }
 
     @Test
