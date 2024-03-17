@@ -15,7 +15,7 @@ public class JdbcChatRepository implements ChatRepository {
     private static final String FIND_BY_ID = "SELECT * FROM chat WHERE id = ?";
     private static final String ADD_CHAT = "INSERT INTO chat id VALUES ?";
     private static final String REMOVE_CHAT = "DELETE FROM chat WHERE id = ?";
-    private static final String ALL_CHATS_BY_LINK_ID = "SELECT chat_id FROM chat_link WHERE link_id = ?";
+    private static final String ALL_CHATS_BY_LINK_ID = "SELECT chat_id FROM chat_to_link WHERE link_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 

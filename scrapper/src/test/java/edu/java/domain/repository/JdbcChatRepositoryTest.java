@@ -50,7 +50,7 @@ class JdbcChatRepositoryTest extends IntegrationEnvironment {
     public void addTest() {
         chatRepository.add(1L);
 
-        assertThat(client.sql("SELECT * FROM chat WHERE chat_id=1").query(Long.class).list()).isNotEmpty();
+        assertThat(client.sql("SELECT * FROM chat WHERE id=1").query(Long.class).list()).isNotEmpty();
     }
 
     @Test
@@ -59,7 +59,7 @@ class JdbcChatRepositoryTest extends IntegrationEnvironment {
     public void addWhenChatAlreadyExistsTest() {
         long chatId = 1L;
 
-        client.sql("INSERT INTO chat(chat_id) values(?)").param(chatId).update();
+        client.sql("INSERT INTO chat(id) values(?)").param(chatId).update();
 
         assertThrows(ChatAlreadyExistsException.class, () -> chatRepository.add(chatId));
     }
@@ -82,7 +82,7 @@ class JdbcChatRepositoryTest extends IntegrationEnvironment {
     public void removeWhenChatNotFoundTest() {
         long chatId = 1L;
 
-        assertThrows(ChatAlreadyExistsException.class, () -> chatRepository.add(chatId));
+        assertThrows(ChatAlreadyExistsException.class, () -> chatRepository.remove(chatId));
     }
 
     @Test
