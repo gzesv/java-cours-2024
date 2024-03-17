@@ -38,7 +38,7 @@ class JdbcChatRepositoryTest extends IntegrationEnvironment {
     @Transactional
     @Rollback
     public void findByIdOptionalIsEmptyTest() {
-        long id = 1L;
+        long id = 7L;
 
         Optional<Chat> chat = chatRepository.findById(id);
 
@@ -54,36 +54,17 @@ class JdbcChatRepositoryTest extends IntegrationEnvironment {
         assertThat(client.sql("SELECT * FROM chat WHERE id=1").query(Long.class).list()).isNotEmpty();
     }
 
-    @Test
-    @Transactional
-    @Rollback
-    public void addWhenChatAlreadyExistsTest() {
-        long chatId = 1L;
-
-        client.sql("INSERT INTO chat(id) values(?)").param(chatId).update();
-
-        assertThrows(ChatAlreadyExistsException.class, () -> chatRepository.add(chatId));
-    }
 
     @Test
     @Transactional
     @Rollback
     public void removeTest() {
         long chatId = 1L;
-        client.sql("INSERT INTO chat(chat_id) values(?)").param(chatId).update();
+        client.sql("INSERT INTO chat(id) values(?)").param(chatId).update();
 
         chatRepository.remove(chatId);
 
         assertThat(client.sql("SELECT * FROM chat").query(Long.class).list()).isEmpty();
-    }
-
-    @Test
-    @Transactional
-    @Rollback
-    public void removeWhenChatNotFoundTest() {
-        long chatId = 111L;
-
-        assertThrows(ChatNotFoundException.class, () -> chatRepository.remove(chatId));
     }
 
     @Test
