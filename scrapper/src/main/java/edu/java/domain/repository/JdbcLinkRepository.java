@@ -20,24 +20,24 @@ public class JdbcLinkRepository implements LinkRepository {
     private static final String LINK_BY_URL = "SELECT * FROM link WHERE url = ?";
 
     private static final String LINKS_BY_CHAT_ID = "SELECT l.* "
-        + "FROM link l JOIN chat_link cl ON l.id = cl.link_id "
+        + "FROM link l JOIN chat_to_link cl ON l.id = cl.link_id "
         + "JOIN chat c ON c.id = cl.chat_id WHERE c.id = ?";
 
     private static final String DELETE_FROM_LINK = "DELETE FROM link WHERE id = ?";
 
     private static final String ALL_OUTDATED_LINKS
-        = "SELECT * FROM link WHERE EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - last_check_time)) >= ?";
+        = "SELECT * FROM link WHERE EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP - checked_at)) >= ?";
 
     private static final String UPDATE_LINK
-        = "UPDATE Link SET updated_at = ?, checked_at = ? WHERE id = ?";
+        = "UPDATE link SET updated_at = ?, checked_at = ? WHERE id = ?";
 
     private final JdbcTemplate jdbcTemplate;
 
     @Override
     @Transactional
     public Link add(Link link) {
-        jdbcTemplate.update(ADD_LINK, link.url(), link.lastUpdateTime(), link.lastCheckTime());
-        return findLinkByUrl(link.url()).get();
+        jdbcTemplate.update(ADD_LINK, link.getUrl(), link.getUpdateAt(), link.getCheckAt());
+        return findLinkByUrl(link.getUrl()).get();
     }
 
     @Override
@@ -63,6 +63,7 @@ public class JdbcLinkRepository implements LinkRepository {
         return jdbcTemplate.query(ALL_OUTDATED_LINKS, new BeanPropertyRowMapper<>(Link.class), interval);
     }
 
+    @Override
     public void setUpdateAndCheckTime(long id, OffsetDateTime lastUpdateTime, OffsetDateTime lastCheckTime) {
         jdbcTemplate.update(UPDATE_LINK, lastUpdateTime, lastCheckTime, id);
     }

@@ -10,6 +10,4 @@ public interface ChatRepository {
     void add(long id);
 
     void remove(long id);
-
-    List<Long> findAllChatIdsWithLink(long linkId);
 }

@@ -38,15 +38,15 @@ public class JdbcLinkService implements LinkService {
             throw new ChatNotFoundException();
         }
 
-        Optional<Link> linkByUrl = linkRepository.findLinkByUrl(link.url());
+        Optional<Link> linkByUrl = linkRepository.findLinkByUrl(link.getUrl());
 
         if (linkByUrl.isEmpty()) {
             Link linkDb = linkRepository.add(link);
-            chatToLinkRepository.add(chatId, linkDb.id());
+            chatToLinkRepository.add(chatId, linkDb.getId());
             return linkDb;
         }
 
-        chatToLinkRepository.add(chatId, linkByUrl.get().id());
+        chatToLinkRepository.add(chatId, linkByUrl.get().getId());
         return linkByUrl.get();
     }
 
@@ -57,13 +57,13 @@ public class JdbcLinkService implements LinkService {
             throw new ChatNotFoundException();
         }
 
-        Optional<Link> linkByUrl = linkRepository.findLinkByUrl(link.url());
+        Optional<Link> linkByUrl = linkRepository.findLinkByUrl(link.getUrl());
 
         if (linkByUrl.isEmpty()) {
             throw new LinkNotFoundException();
         }
 
-        long linkId = linkByUrl.get().id();
+        long linkId = linkByUrl.get().getId();
 
         chatToLinkRepository.remove(chatId, linkId);
 

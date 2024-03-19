@@ -30,14 +30,14 @@ public class LinkUpdateService {
         List<Update> updates = new ArrayList<>();
 
         links.forEach(link -> {
-            String host = URI.create(link.url()).getHost();
+            String host = URI.create(link.getUrl()).getHost();
             LinkUpdater updater = updatersHolder.getUpdaterByDomain(host);
 
             Optional<Update> update = updater.fetchUpdate(link);
             update.ifPresent(u -> {
                 updates.add(u);
                 linkService.setUpdateAndCheckTime(
-                    link.id(),
+                    link.getId(),
                     u.updateTime(),
                     OffsetDateTime.now(ZoneId.systemDefault())
                 );

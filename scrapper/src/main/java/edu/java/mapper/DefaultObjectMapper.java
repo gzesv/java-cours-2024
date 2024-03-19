@@ -19,11 +19,11 @@ public class DefaultObjectMapper {
     }
 
     public List<LinkResponse> mapToListWithLinkResponses(List<Link> links) {
-        return links.stream().map(link -> new LinkResponse(link.id(), URI.create(link.url()))).toList();
+        return links.stream().map(link -> new LinkResponse(link.getId(), URI.create(link.getUrl()))).toList();
     }
 
     public LinkResponse linkToLinkResponse(Link link) {
-        return new LinkResponse(link.id(), URI.create(link.url()));
+        return new LinkResponse(link.getId(), URI.create(link.getUrl()));
     }
 
     public Link convertToLink(AddLinkRequest request) {

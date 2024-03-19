@@ -1,6 +1,7 @@
 package edu.java.services.jdbc;
 
 import edu.java.domain.ChatRepository;
+import edu.java.domain.ChatToLinkRepository;
 import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.services.ChatService;
@@ -14,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcChatService implements ChatService {
 
     private final ChatRepository chatRepository;
+
+    private final ChatToLinkRepository chatToLinkRepository;
 
     @Override
     @Transactional
@@ -41,6 +44,6 @@ public class JdbcChatService implements ChatService {
 
     @Override
     public List<Long> findAllChatsIdsWithLink(long linkId) {
-        return chatRepository.findAllChatIdsWithLink(linkId);
+        return chatToLinkRepository.findAllChatIdsWithLink(linkId);
     }
 }

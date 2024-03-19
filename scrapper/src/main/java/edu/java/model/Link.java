@@ -1,17 +1,44 @@
 package edu.java.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 
-public record Link(
-    long id,
+//@AllArgsConstructor
+//public record Link(
+//    long id,
+//
+//    String url,
+//
+//    OffsetDateTime lastUpdateTime,
+//
+//    OffsetDateTime lastCheckTime
+//) {
+//    public Link(String url) {
+//        this(
+//            Long.MIN_VALUE,
+//            url,
+//            OffsetDateTime.now(ZoneId.systemDefault()),
+//            OffsetDateTime.now(ZoneId.systemDefault())
+//        );
+//    }
+//}
 
-    String url,
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Link {
+    private long id;
 
-    OffsetDateTime lastUpdateTime,
+    private String url;
 
-    OffsetDateTime lastCheckTime
-) {
+    private OffsetDateTime updateAt;
+
+    private OffsetDateTime checkAt;
+
     public Link(String url) {
         this(
             Long.MIN_VALUE,

@@ -23,6 +23,7 @@ class LinkControllerTest {
     private DefaultObjectMapper mapper;
 
     private static final String LINKS_CONTROLLER_PATH = "/links";
+
     private static final String REQUEST_HEADER_NAME = "Tg-Chat-Id";
 
     @Test

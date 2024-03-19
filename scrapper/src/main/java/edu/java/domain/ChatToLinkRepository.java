@@ -8,4 +8,6 @@ public interface ChatToLinkRepository {
     void remove(long chatId, long linkId);
 
     List<Long> linkTrackers(long linkId);
+
+    List<Long> findAllChatIdsWithLink(long linkId);
 }
