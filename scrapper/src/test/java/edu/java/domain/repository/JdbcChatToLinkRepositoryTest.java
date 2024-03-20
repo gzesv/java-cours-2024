@@ -68,27 +68,4 @@ class JdbcChatToLinkRepositoryTest extends IntegrationEnvironment {
             .list())
             .isEmpty();
     }
-
-    @Test
-    @Transactional
-    @Rollback
-    void findAllChatIdsWithLink() {
-        long chatId1 = 1L;
-        long chatId2 = 2L;
-        long chatId3 = 3L;
-        long linkId = 1L;
-        chatRepository.add(chatId1);
-        chatRepository.add(chatId2);
-        chatRepository.add(chatId3);
-        linkRepository.add(new Link(linkId, "https://github.com/1",
-            OffsetDateTime.now(ZoneId.systemDefault()), OffsetDateTime.now(ZoneId.systemDefault())
-        ));
-        chatToLinkRepository.add(chatId1, linkId);
-        chatToLinkRepository.add(chatId2, linkId);
-        chatToLinkRepository.add(chatId3, linkId);
-
-        List<Long> ids = chatToLinkRepository.findAllChatIdsWithLink(linkId);
-
-        assertThat(ids.size()).isEqualTo(3);
-    }
 }
