@@ -85,6 +85,6 @@ public class JdbcLinkService implements LinkService {
     }
 
     private boolean isLinkTracked(long id) {
-        return chatToLinkRepository.linkTrackers(id).isEmpty();
+        return chatToLinkRepository.findAllChatIdsWithLink(id).isEmpty();
     }
 }

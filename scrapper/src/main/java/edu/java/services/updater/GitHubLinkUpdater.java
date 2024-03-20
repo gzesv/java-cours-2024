@@ -17,9 +17,9 @@ public class GitHubLinkUpdater implements LinkUpdater {
 
     private final GitHubClient gitHubWebClient;
 
-    private static final int userIndex = 2;
+    private static final int USER_INDEX = 2;
 
-    private static final int repositoryIndex = 3;
+    private static final int REPOSITORY_INDEX = 3;
 
     @Override
     public Optional<Update> fetchUpdate(Link link) {
@@ -47,6 +47,6 @@ public class GitHubLinkUpdater implements LinkUpdater {
 
     private Pair<String, String> getUserAndRepository(String url) {
         String[] urlParts = url.split("/+");
-        return Pair.of(urlParts[userIndex], urlParts[repositoryIndex]);
+        return Pair.of(urlParts[USER_INDEX], urlParts[REPOSITORY_INDEX]);
     }
 }

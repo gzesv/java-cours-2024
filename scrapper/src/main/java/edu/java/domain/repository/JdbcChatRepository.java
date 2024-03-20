@@ -2,7 +2,6 @@ package edu.java.domain.repository;
 
 import edu.java.domain.ChatRepository;
 import edu.java.model.Chat;
-import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;

@@ -16,8 +16,6 @@ public class JdbcChatToLinkRepository implements ChatToLinkRepository {
     private static final String DELETE_FROM_CHAT_TO_LINK
         = "DELETE FROM chat_to_link WHERE chat_id = ? AND link_id = ?";
 
-    private static final String LINK_TRACKERS = "SELECT chat_id FROM chat_to_link WHERE link_id = ?";
-
     private static final String ALL_CHATS_BY_LINK_ID = "SELECT chat_id FROM chat_to_link WHERE link_id = ?";
 
     private final JdbcTemplate jdbcTemplate;
@@ -30,11 +28,6 @@ public class JdbcChatToLinkRepository implements ChatToLinkRepository {
     @Override
     public void remove(long chatId, long linkId) {
         jdbcTemplate.update(DELETE_FROM_CHAT_TO_LINK, chatId, linkId);
-    }
-
-    @Override
-    public List<Long> linkTrackers(long linkId) {
-        return jdbcTemplate.queryForList(LINK_TRACKERS, Long.class, linkId);
     }
 
     @Override
