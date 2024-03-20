@@ -5,11 +5,16 @@ import edu.java.dto.request.RemoveLinkRequest;
 import edu.java.dto.response.ApiErrorResponse;
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
+import edu.java.mapper.DefaultObjectMapper;
+import edu.java.model.Link;
+import edu.java.services.LinkService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
+import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +28,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/links")
-public class LinksController {
+@RequiredArgsConstructor
+public class LinkController {
+
+    private final LinkService linkService;
+
+    private final DefaultObjectMapper mapper;
+
     @Operation(
         summary = "Получить все отслеживаемые ссылки",
         responses = {
@@ -49,7 +60,8 @@ public class LinksController {
     public ResponseEntity<ListLinksResponse> getLinks(
         @RequestHeader("Tg-Chat-Id") Long chatId
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        List<Link> links = linkService.getLinks(chatId);
+        return new ResponseEntity<>(mapper.mapToListLinksResponse(links), HttpStatus.OK);
     }
 
     @Operation(
@@ -76,9 +88,10 @@ public class LinksController {
     @PostMapping
     public ResponseEntity<LinkResponse> addLink(
         @RequestHeader("Tg-Chat-Id") Long chatId,
-        @RequestBody @Valid AddLinkRequest request
+        @RequestBody @Valid AddLinkRequest addLinkRequest
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        Link link = linkService.add(chatId, mapper.convertToLink(addLinkRequest));
+        return new ResponseEntity<>(mapper.linkToLinkResponse(link), HttpStatus.OK);
     }
 
     @Operation(
@@ -113,8 +126,9 @@ public class LinksController {
     @DeleteMapping
     public ResponseEntity<LinkResponse> deleteLink(
         @RequestHeader("Tg-Chat-Id") Long chatId,
-        @RequestBody @Valid RemoveLinkRequest request
+        @RequestBody @Valid RemoveLinkRequest removeLinkRequest
     ) {
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+        Link link = linkService.remove(chatId, mapper.convertToLink(removeLinkRequest));
+        return new ResponseEntity<>(mapper.linkToLinkResponse(link), HttpStatus.OK);
     }
 }

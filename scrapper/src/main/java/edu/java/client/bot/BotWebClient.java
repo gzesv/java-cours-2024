@@ -1,8 +1,10 @@
 package edu.java.client.bot;
 
 import edu.java.dto.request.LinkUpdateRequest;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@Component
 public class BotWebClient implements BotClient {
     private static final String DEFAULT_BASE_URL = "http://127.0.0.1:8090";
     private static final String UPDATES_ENDPOINT = "/updates";
