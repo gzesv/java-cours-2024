@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class DefaultObjectMapper {
+
     public ListLinksResponse mapToListLinksResponse(List<Link> links) {
         List<LinkResponse> linkResponses = mapToListWithLinkResponses(links);
         return new ListLinksResponse(linkResponses, linkResponses.size());
