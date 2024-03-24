@@ -1,7 +1,7 @@
 package edu.java.exceptionhandler;
 
 import edu.java.controller.ChatController;
-import edu.java.controller.LinksController;
+import edu.java.controller.LinkController;
 import edu.java.dto.request.AddLinkRequest;
 import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
@@ -27,7 +27,7 @@ class ApiExceptionHandlerTest {
     private ChatController chatController;
 
     @MockBean
-    private LinksController linksController;
+    private LinkController linkController;
 
     @Test
     public void chatAlreadyExistsExceptionTest() throws Exception {
@@ -56,7 +56,7 @@ class ApiExceptionHandlerTest {
     @Test
     public void linkAlreadyExistsExceptionTest() throws Exception {
         Mockito.doThrow(LinkAlreadyExistsException.class)
-            .when(linksController)
+            .when(linkController)
             .addLink(1L, new AddLinkRequest(""));
 
         mockMvc.perform(

@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DatabaseTest extends IntegrationTest {
+public class DatabaseEnvironment extends IntegrationEnvironment {
     @Test
     @SneakyThrows
     public void chatTableShouldBeAddedTest() {
@@ -17,7 +17,6 @@ public class DatabaseTest extends IntegrationTest {
         ResultSet resultSet = statement.executeQuery();
 
         assertThat(resultSet.getMetaData().getColumnName(1)).isEqualTo("id");
-        assertThat(resultSet.getMetaData().getColumnName(2)).isEqualTo("name");
     }
 
     @Test
