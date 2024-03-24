@@ -1,10 +1,12 @@
-package edu.java.domain.repository;
+package edu.java.repository;
 
+import edu.java.repository.jdbc.JdbcChatRepository;
+import edu.java.repository.jdbc.JdbcChatToLinkRepository;
+import edu.java.repository.jdbc.JdbcLinkRepository;
 import edu.java.model.Link;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

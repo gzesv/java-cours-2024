@@ -1,5 +1,6 @@
-package edu.java.domain.repository;
+package edu.java.repository;
 
+import edu.java.repository.jdbc.JdbcChatRepository;
 import edu.java.model.Chat;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.util.Optional;

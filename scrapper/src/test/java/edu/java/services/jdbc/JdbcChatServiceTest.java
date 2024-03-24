@@ -1,7 +1,7 @@
 package edu.java.services.jdbc;
 
-import edu.java.domain.ChatRepository;
-import edu.java.domain.ChatToLinkRepository;
+import edu.java.repository.ChatRepository;
+import edu.java.repository.ChatToLinkRepository;
 import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.model.Chat;
@@ -31,7 +31,7 @@ class JdbcChatServiceTest {
 
     @Test
     void addChatTest() {
-        chatService.addChat(1L);
+        chatService.addChat(new Chat(1L));
 
         Mockito.verify(chatRepository).add(1L);
     }
@@ -42,7 +42,7 @@ class JdbcChatServiceTest {
         when(chatRepository.findById(chat.getId())).thenReturn(Optional.of(chat));
 
         assertThatExceptionOfType(ChatAlreadyExistsException.class)
-            .isThrownBy(() -> chatService.addChat(1L));
+            .isThrownBy(() -> chatService.addChat(new Chat(1L)));
     }
 
     @Test
@@ -50,7 +50,7 @@ class JdbcChatServiceTest {
         Chat chat = new Chat(1L);
         when(chatRepository.findById(chat.getId())).thenReturn(Optional.of(chat));
 
-        chatService.deleteChat(chat.getId());
+        chatService.deleteChat(chat);
 
         Mockito.verify(chatRepository).remove(chat.getId());
     }
@@ -59,7 +59,7 @@ class JdbcChatServiceTest {
     public void deleteChatWhenChatNotExistsTest() {
         Chat chat = new Chat(1L);
         assertThatExceptionOfType(ChatNotFoundException.class)
-            .isThrownBy(() -> chatService.deleteChat(chat.getId()));
+            .isThrownBy(() -> chatService.deleteChat(chat));
     }
 
     @Test

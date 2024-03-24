@@ -1,11 +1,12 @@
 package edu.java.services;
 
+import edu.java.model.Chat;
 import java.util.List;
 
 public interface ChatService {
-    void addChat(long id);
+    void addChat(Chat chat);
 
-    void deleteChat(long id);
+    void deleteChat(Chat chat);
 
     boolean isChatExists(long id);
 

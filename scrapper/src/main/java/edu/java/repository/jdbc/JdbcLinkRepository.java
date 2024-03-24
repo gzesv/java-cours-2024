@@ -1,7 +1,7 @@
-package edu.java.domain.repository;
+package edu.java.repository.jdbc;
 
-import edu.java.domain.LinkRepository;
 import edu.java.model.Link;
+import edu.java.repository.LinkRepository;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;

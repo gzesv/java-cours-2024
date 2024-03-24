@@ -1,23 +1,18 @@
-package edu.java.services.jdbc;
+package edu.java.services.jpa;
 
 import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.model.Chat;
-import edu.java.repository.ChatRepository;
-import edu.java.repository.ChatToLinkRepository;
+import edu.java.repository.jpa.JpaChatRepository;
 import edu.java.services.ChatService;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
 @RequiredArgsConstructor
-public class JdbcChatService implements ChatService {
+public class JpaChatService implements ChatService {
 
-    private final ChatRepository chatRepository;
-
-    private final ChatToLinkRepository chatToLinkRepository;
+    private final JpaChatRepository chatRepository;
 
     @Override
     @Transactional
@@ -26,7 +21,7 @@ public class JdbcChatService implements ChatService {
             throw new ChatAlreadyExistsException();
         }
 
-        chatRepository.add(chat.getId());
+        chatRepository.save(chat);
     }
 
     @Override
@@ -36,15 +31,16 @@ public class JdbcChatService implements ChatService {
             throw new ChatNotFoundException();
         }
 
-        chatRepository.remove(chat.getId());
+        chatRepository.delete(chat);
     }
 
+    @Override
     public boolean isChatExists(long id) {
-        return chatRepository.findById(id).isPresent();
+        return chatRepository.existsById(id);
     }
 
     @Override
     public List<Long> findAllChatsIdsWithLink(long linkId) {
-        return chatToLinkRepository.findAllChatIdsWithLink(linkId);
+        return chatRepository.findAllChatsIdsWithLink(linkId);
     }
 }

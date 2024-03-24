@@ -1,10 +1,10 @@
 package edu.java.services.jdbc;
 
-import edu.java.domain.ChatToLinkRepository;
-import edu.java.domain.LinkRepository;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.exception.LinkNotFoundException;
 import edu.java.model.Link;
+import edu.java.repository.ChatToLinkRepository;
+import edu.java.repository.LinkRepository;
 import edu.java.services.LinkService;
 import java.time.OffsetDateTime;
 import java.util.List;

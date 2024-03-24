@@ -4,6 +4,7 @@ import edu.java.dto.request.AddLinkRequest;
 import edu.java.dto.request.RemoveLinkRequest;
 import edu.java.dto.response.LinkResponse;
 import edu.java.dto.response.ListLinksResponse;
+import edu.java.model.Chat;
 import edu.java.model.Link;
 import java.net.URI;
 import java.util.List;
@@ -33,6 +34,10 @@ public class DefaultObjectMapper {
 
     public Link convertToLink(RemoveLinkRequest request) {
         return new Link(request.link());
+    }
+
+    public Chat convertToChat(long id) {
+        return new Chat(id);
     }
 
 }
