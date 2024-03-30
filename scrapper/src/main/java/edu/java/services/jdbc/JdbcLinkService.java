@@ -18,13 +18,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class JdbcLinkService implements LinkService {
 
     private final LinkRepository linkRepository;
+
     private final ChatToLinkRepository chatToLinkRepository;
+
     private final JdbcChatService chatService;
 
     @Override
     @Transactional
     public List<Link> getLinks(long chatId) {
-        if (!chatService.isChatExists(chatId)) {
+        if (chatService.isChatNotExists(chatId)) {
             throw new ChatNotFoundException();
         }
 
@@ -34,7 +36,7 @@ public class JdbcLinkService implements LinkService {
     @Override
     @Transactional
     public Link add(long chatId, Link link) {
-        if (!chatService.isChatExists(chatId)) {
+        if (chatService.isChatNotExists(chatId)) {
             throw new ChatNotFoundException();
         }
 
@@ -53,7 +55,7 @@ public class JdbcLinkService implements LinkService {
     @Override
     @Transactional
     public Link remove(long chatId, Link link) {
-        if (!chatService.isChatExists(chatId)) {
+        if (chatService.isChatNotExists(chatId)) {
             throw new ChatNotFoundException();
         }
 

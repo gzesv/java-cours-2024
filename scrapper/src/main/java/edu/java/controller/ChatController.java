@@ -1,6 +1,7 @@
 package edu.java.controller;
 
 import edu.java.dto.response.ApiErrorResponse;
+import edu.java.mapper.DefaultObjectMapper;
 import edu.java.services.ChatService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,6 +22,8 @@ public class ChatController {
 
     private final ChatService chatService;
 
+    private final DefaultObjectMapper mapper;
+
     @Operation(
         summary = "Зарегистрировать чат",
         responses = {
@@ -40,7 +43,7 @@ public class ChatController {
     )
     @PostMapping("/{id}")
     public void addChat(@PathVariable("id") Long id) {
-        chatService.addChat(id);
+        chatService.addChat(mapper.convertToChat(id));
     }
 
     @Operation(
@@ -70,6 +73,6 @@ public class ChatController {
     )
     @DeleteMapping("/{id}")
     public void deleteChat(@PathVariable("id") Long id) {
-        chatService.deleteChat(id);
+        chatService.deleteChat(mapper.convertToChat(id));
     }
 }

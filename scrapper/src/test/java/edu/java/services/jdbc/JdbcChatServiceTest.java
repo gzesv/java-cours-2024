@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatExceptionOfType;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,9 +31,11 @@ class JdbcChatServiceTest {
 
     @Test
     void addChatTest() {
-        chatService.addChat(1L);
+        Chat chat = new Chat(1L);
 
-        Mockito.verify(chatRepository).add(1L);
+        chatService.addChat(chat);
+
+        verify(chatRepository).add(1L);
     }
 
     @Test
@@ -42,7 +44,7 @@ class JdbcChatServiceTest {
         when(chatRepository.findById(chat.getId())).thenReturn(Optional.of(chat));
 
         assertThatExceptionOfType(ChatAlreadyExistsException.class)
-            .isThrownBy(() -> chatService.addChat(1L));
+            .isThrownBy(() -> chatService.addChat(chat));
     }
 
     @Test
@@ -50,16 +52,16 @@ class JdbcChatServiceTest {
         Chat chat = new Chat(1L);
         when(chatRepository.findById(chat.getId())).thenReturn(Optional.of(chat));
 
-        chatService.deleteChat(chat.getId());
+        chatService.deleteChat(chat);
 
-        Mockito.verify(chatRepository).remove(chat.getId());
+        verify(chatRepository).remove(chat.getId());
     }
 
     @Test
     public void deleteChatWhenChatNotExistsTest() {
         Chat chat = new Chat(1L);
         assertThatExceptionOfType(ChatNotFoundException.class)
-            .isThrownBy(() -> chatService.deleteChat(chat.getId()));
+            .isThrownBy(() -> chatService.deleteChat(chat));
     }
 
     @Test
@@ -68,7 +70,7 @@ class JdbcChatServiceTest {
 
         chatService.isChatExists(chat.getId());
 
-        Mockito.verify(chatRepository).findById(chat.getId());
+        verify(chatRepository).findById(chat.getId());
     }
 
     @Test

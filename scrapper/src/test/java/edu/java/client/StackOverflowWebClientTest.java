@@ -13,11 +13,11 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class StackOverflowWebClientTest {
+    private static final Long questionId = 75634833L;
+
     private WireMockServer wireMockServer;
 
     private StackOverflowWebClient stackOverflowWebClient;
-
-    private static final Long questionId = 75634833L;
 
     @BeforeEach
     void setUp() {

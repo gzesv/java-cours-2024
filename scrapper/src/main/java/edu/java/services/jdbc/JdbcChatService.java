@@ -4,6 +4,7 @@ import edu.java.domain.ChatRepository;
 import edu.java.domain.ChatToLinkRepository;
 import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
+import edu.java.model.Chat;
 import edu.java.services.ChatService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -20,26 +21,32 @@ public class JdbcChatService implements ChatService {
 
     @Override
     @Transactional
-    public void addChat(long id) {
-        if (isChatExists(id)) {
+    public void addChat(Chat chat) {
+        if (isChatExists(chat.getId())) {
             throw new ChatAlreadyExistsException();
         }
 
-        chatRepository.add(id);
+        chatRepository.add(chat.getId());
     }
 
     @Override
     @Transactional
-    public void deleteChat(long id) {
-        if (!isChatExists(id)) {
+    public void deleteChat(Chat chat) {
+        if (isChatNotExists(chat.getId())) {
             throw new ChatNotFoundException();
         }
 
-        chatRepository.remove(id);
+        chatRepository.remove(chat.getId());
     }
 
+    @Override
     public boolean isChatExists(long id) {
         return chatRepository.findById(id).isPresent();
+    }
+
+    @Override
+    public boolean isChatNotExists(long id) {
+        return chatRepository.findById(id).isEmpty();
     }
 
     @Override

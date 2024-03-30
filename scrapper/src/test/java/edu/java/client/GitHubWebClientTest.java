@@ -13,13 +13,13 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GitHubWebClientTest {
-    private WireMockServer wireMockServer;
-
-    private GitHubWebClient gitHubWebClient;
-
     private static final String repositoryName = "java-cours-2024";
 
     private static final String userName = "gzesv";
+
+    private WireMockServer wireMockServer;
+
+    private GitHubWebClient gitHubWebClient;
 
     @BeforeEach
     void setUp() {

@@ -13,13 +13,14 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class GitHubLinkUpdater implements LinkUpdater {
-    private static final String SUPPORT_DOMAIN = "github.com";
-
-    private final GitHubClient gitHubWebClient;
 
     private static final int USER_INDEX = 2;
 
     private static final int REPOSITORY_INDEX = 3;
+
+    private static final String SUPPORT_DOMAIN = "github.com";
+
+    private final GitHubClient gitHubWebClient;
 
     @Override
     public Optional<Update> fetchUpdate(Link link) {
