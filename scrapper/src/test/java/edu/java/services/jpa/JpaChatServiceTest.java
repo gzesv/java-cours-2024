@@ -1,12 +1,10 @@
-package edu.java.services.jdbc;
+package edu.java.services.jpa;
 
 import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.model.Chat;
-import edu.java.repository.ChatRepository;
-import edu.java.repository.ChatToLinkRepository;
+import edu.java.repository.jpa.JpaChatRepository;
 import java.util.List;
-import java.util.Optional;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,16 +16,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class JdbcChatServiceTest {
-
+class JpaChatServiceTest {
     @Mock
-    private ChatRepository chatRepository;
-
-    @Mock
-    private ChatToLinkRepository chatToLinkRepository;
+    private JpaChatRepository chatRepository;
 
     @InjectMocks
-    private JdbcChatService chatService;
+    private JpaChatService chatService;
 
     @Test
     void addChatTest() {
@@ -35,13 +29,13 @@ class JdbcChatServiceTest {
 
         chatService.addChat(chat);
 
-        verify(chatRepository).add(1L);
+        verify(chatRepository).save(chat);
     }
 
     @Test
     void addChatWhenChatExistsTest() {
         Chat chat = new Chat(1L);
-        when(chatRepository.findById(chat.getId())).thenReturn(Optional.of(chat));
+        when(chatRepository.existsById(chat.getId())).thenReturn(true);
 
         assertThatExceptionOfType(ChatAlreadyExistsException.class)
             .isThrownBy(() -> chatService.addChat(chat));
@@ -50,34 +44,35 @@ class JdbcChatServiceTest {
     @Test
     public void deleteChatTest() {
         Chat chat = new Chat(1L);
-        when(chatRepository.findById(chat.getId())).thenReturn(Optional.of(chat));
+        when(chatRepository.existsById(chat.getId())).thenReturn(true);
 
         chatService.deleteChat(chat);
 
-        verify(chatRepository).remove(chat.getId());
+        verify(chatRepository).delete(chat);
     }
 
     @Test
     public void deleteChatWhenChatNotExistsTest() {
         Chat chat = new Chat(1L);
+
         assertThatExceptionOfType(ChatNotFoundException.class)
             .isThrownBy(() -> chatService.deleteChat(chat));
     }
 
     @Test
-    void isChatExists() {
+    void isChatExistsTest() {
         Chat chat = new Chat(1L);
 
         chatService.isChatExists(chat.getId());
 
-        verify(chatRepository).findById(chat.getId());
+        verify(chatRepository).existsById(chat.getId());
     }
 
     @Test
-    void findAllChatsIdsWithLink() {
+    void findAllChatsIdsWithLinkTest() {
         Chat chat = new Chat(1L);
         long testLinkId = 123;
-        when(chatToLinkRepository.findAllChatIdsWithLink(testLinkId)).thenReturn(List.of(chat.getId()));
+        when(chatRepository.findAllChatsIdsWithLink(testLinkId)).thenReturn(List.of(chat.getId()));
 
         List<Long> chatIds = chatService.findAllChatsIdsWithLink(testLinkId);
 

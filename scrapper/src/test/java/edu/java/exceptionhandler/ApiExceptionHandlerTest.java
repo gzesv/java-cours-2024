@@ -1,24 +1,27 @@
 package edu.java.exceptionhandler;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.java.controller.ChatController;
 import edu.java.controller.LinkController;
 import edu.java.dto.request.AddLinkRequest;
+import edu.java.dto.response.ApiErrorResponse;
 import edu.java.exception.ChatAlreadyExistsException;
 import edu.java.exception.ChatNotFoundException;
 import edu.java.exception.LinkAlreadyExistsException;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.doThrow;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest({ChatController.class, LinkController.class})
 class ApiExceptionHandlerTest {
+
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @Autowired
     private MockMvc mockMvc;
@@ -31,44 +34,68 @@ class ApiExceptionHandlerTest {
 
     @Test
     public void chatAlreadyExistsExceptionTest() throws Exception {
-        Mockito.doThrow(ChatAlreadyExistsException.class)
+        doThrow(ChatAlreadyExistsException.class)
             .when(chatController)
             .deleteChat(-1L);
 
-        mockMvc.perform(
+        var result = mockMvc.perform(
             MockMvcRequestBuilders
                 .delete("/tg-chat/{id}", -1L)
-        ).andExpect(MockMvcResultMatchers.status().isBadRequest());
+        ).andReturn();
+
+        ApiErrorResponse response = objectMapper.readValue(
+            result.getResponse().getContentAsString(),
+            ApiErrorResponse.class
+        );
+
+        assertThat(response.code()).isEqualTo("400");
+        assertThat(result.getResolvedException()).isInstanceOf(ChatAlreadyExistsException.class);
     }
 
     @Test
     public void chatNotFoundExceptionTest() throws Exception {
-        Mockito.doThrow(ChatNotFoundException.class)
+        doThrow(ChatNotFoundException.class)
             .when(chatController)
             .deleteChat(1L);
 
-        mockMvc.perform(
-            MockMvcRequestBuilders
-                .delete("/tg-chat/{id}", 1L))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        var result = mockMvc.perform(
+                MockMvcRequestBuilders
+                    .delete("/tg-chat/{id}", 1L))
+            .andReturn();
+
+        ApiErrorResponse response = objectMapper.readValue(
+            result.getResponse().getContentAsString(),
+            ApiErrorResponse.class
+        );
+
+        assertThat(response.code()).isEqualTo("400");
+        assertThat(result.getResolvedException()).isInstanceOf(ChatNotFoundException.class);
     }
 
     @Test
     public void linkAlreadyExistsExceptionTest() throws Exception {
-        Mockito.doThrow(LinkAlreadyExistsException.class)
+        doThrow(LinkAlreadyExistsException.class)
             .when(linkController)
             .addLink(1L, new AddLinkRequest(""));
 
-        mockMvc.perform(
-            MockMvcRequestBuilders
-                .post("/links")
-                .header("Tg-Chat-Id", 1L)
-                .content("""
-                    {
-                        "link": ""
-                    }
-                    """)
-                .contentType("application/json"))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest());
+        var result = mockMvc.perform(
+                MockMvcRequestBuilders
+                    .post("/links")
+                    .header("Tg-Chat-Id", 1L)
+                    .content("""
+                        {
+                            "link": ""
+                        }
+                        """)
+                    .contentType("application/json"))
+            .andReturn();
+
+        ApiErrorResponse response = objectMapper.readValue(
+            result.getResponse().getContentAsString(),
+            ApiErrorResponse.class
+        );
+
+        assertThat(response.code()).isEqualTo("400");
+        assertThat(result.getResolvedException()).isInstanceOf(LinkAlreadyExistsException.class);
     }
 }

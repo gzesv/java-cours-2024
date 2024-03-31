@@ -1,6 +1,6 @@
-package edu.java.domain.repository;
+package edu.java.repository.jdbc;
 
-import edu.java.domain.ChatToLinkRepository;
+import edu.java.repository.ChatToLinkRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

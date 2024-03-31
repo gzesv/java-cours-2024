@@ -1,4 +1,4 @@
-package edu.java.domain;
+package edu.java.repository;
 
 import java.util.List;
 

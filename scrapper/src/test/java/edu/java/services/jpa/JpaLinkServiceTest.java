@@ -1,11 +1,10 @@
-package edu.java.services.jdbc;
+package edu.java.services.jpa;
 
 import edu.java.exception.ChatNotFoundException;
 import edu.java.exception.LinkNotFoundException;
 import edu.java.model.Chat;
 import edu.java.model.Link;
-import edu.java.repository.ChatToLinkRepository;
-import edu.java.repository.LinkRepository;
+import edu.java.repository.jpa.JpaLinkRepository;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.List;
@@ -22,30 +21,26 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class JdbcLinkServiceTest {
+class JpaLinkServiceTest {
+    @Mock
+    private JpaChatService chatService;
+
+    @Mock
+    private JpaLinkRepository linkRepository;
 
     @InjectMocks
-    private JdbcLinkService linkService;
-
-    @Mock
-    private JdbcChatService chatService;
-
-    @Mock
-    private LinkRepository linkRepository;
-
-    @Mock
-    private ChatToLinkRepository chatToLinkRepository;
+    private JpaLinkService linkService;
 
     @Test
     void getLinksTest() {
         Link link = new Link("https://github.com/1");
         Chat chat = new Chat(1L);
         when(chatService.isChatNotExists(chat.getId())).thenReturn(false);
-        when(linkRepository.findAll(chat.getId())).thenReturn(List.of(link));
+        when(linkRepository.findAllByChatsId(chat.getId())).thenReturn(List.of(link));
 
         List<Link> links = linkService.getLinks(chat.getId());
 
-        verify(linkRepository).findAll(chat.getId());
+        verify(linkRepository).findAllByChatsId(chat.getId());
         assertThat(links.size()).isEqualTo(1);
         assertThat(links.getFirst()).isEqualTo(link);
     }
@@ -65,12 +60,13 @@ class JdbcLinkServiceTest {
         Chat chat = new Chat(1L);
         Link link = new Link(1L, "https://github.com", OffsetDateTime.now(), OffsetDateTime.now());
         when(chatService.isChatNotExists(chat.getId())).thenReturn(false);
-        when(linkRepository.findLinkByUrl(link.getUrl())).thenReturn(Optional.empty());
-        when(linkRepository.add(link)).thenReturn(link);
+        when(linkRepository.findByUrl(link.getUrl())).thenReturn(null);
+        when(linkRepository.saveAndFlush(link)).thenReturn(link);
 
         Link actual = linkService.add(chat.getId(), link);
 
-        verify(linkRepository).add(link);
+        verify(linkRepository).saveAndFlush(link);
+        verify(linkRepository).saveChatToLink(chat.getId(), link.getId());
         assertThat(actual).isEqualTo(link);
     }
 
@@ -90,11 +86,11 @@ class JdbcLinkServiceTest {
         Chat chat = new Chat(1L);
         Link link = new Link(1L, "https://github.com", OffsetDateTime.now(), OffsetDateTime.now());
         when(chatService.isChatNotExists(chat.getId())).thenReturn(false);
-        when(linkRepository.findLinkByUrl(link.getUrl())).thenReturn(Optional.of(link));
+        when(linkRepository.findByUrl(link.getUrl())).thenReturn(link);
 
         Link actual = linkService.add(chat.getId(), link);
 
-        verify(chatToLinkRepository).add(chat.getId(), link.getId());
+        verify(linkRepository).saveChatToLink(chat.getId(), link.getId());
         assertThat(actual).isEqualTo(link);
     }
 
@@ -103,12 +99,12 @@ class JdbcLinkServiceTest {
         Chat chat = new Chat(1L);
         Link link = new Link(1L, "https://github.com", OffsetDateTime.now(), OffsetDateTime.now());
         when(chatService.isChatNotExists(chat.getId())).thenReturn(false);
-        when(linkRepository.findLinkByUrl(link.getUrl())).thenReturn(Optional.of(link));
+        when(linkRepository.findByUrl(link.getUrl())).thenReturn(link);
 
         Link actual = linkService.remove(chat.getId(), link);
 
-        verify(chatToLinkRepository).remove(chat.getId(), link.getId());
-        verify(linkRepository).remove(link.getId());
+        verify(linkRepository).deleteChatToLink(chat.getId(), link.getId());
+        verify(linkRepository).delete(link);
         assertThat(actual).isEqualTo(link);
     }
 
@@ -124,14 +120,16 @@ class JdbcLinkServiceTest {
 
     @Test
     void findAllOutdatedLinks() {
-        var list = List.of(new Link(1L, "https://github.com/1",
-            OffsetDateTime.now(ZoneId.systemDefault()),
-            OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(400)
+        var list = List.of(
+            new Link(1L, "https://github.com/1",
+                OffsetDateTime.now(ZoneId.systemDefault()),
+                OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(400)
             ),
             new Link(2L, "https://github.com/2",
-            OffsetDateTime.now(ZoneId.systemDefault()),
-            OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(400)
-        ));
+                OffsetDateTime.now(ZoneId.systemDefault()),
+                OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(400)
+            )
+        );
         int interval = 60;
         when(linkRepository.findAllOutdatedLinks(interval)).thenReturn(list);
 
@@ -144,9 +142,20 @@ class JdbcLinkServiceTest {
     @Test
     void setUpdateAndCheckTime() {
         Link link = new Link(1L, "https://github.com", OffsetDateTime.now(), OffsetDateTime.now());
+        when(linkRepository.findById(link.getId())).thenReturn(Optional.of(link));
 
         linkService.setUpdateAndCheckTime(link.getId(), link.getUpdateAt(), link.getCheckAt());
 
-        verify(linkRepository).setUpdateAndCheckTime(link.getId(), link.getUpdateAt(), link.getCheckAt());
+        verify(linkRepository).save(link);
+    }
+
+    @Test
+    void setUpdateAndCheckTimeWhenLinkNotExistsTest() {
+        Chat chat = new Chat(1L);
+        Link link = new Link(1L, "https://github.com", OffsetDateTime.now(), OffsetDateTime.now());
+        doThrow(LinkNotFoundException.class).when(linkRepository).findById(chat.getId());
+
+        assertThatThrownBy(() -> linkService.setUpdateAndCheckTime(chat.getId(), link.getUpdateAt(), link.getCheckAt()))
+            .isInstanceOf(LinkNotFoundException.class);
     }
 }

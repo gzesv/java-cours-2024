@@ -1,6 +1,9 @@
 package edu.java.domain.repository;
 
 import edu.java.model.Link;
+import edu.java.repository.jdbc.JdbcChatRepository;
+import edu.java.repository.jdbc.JdbcChatToLinkRepository;
+import edu.java.repository.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
