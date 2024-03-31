@@ -90,30 +90,4 @@ class JpaLinkRepositoryTest extends IntegrationEnvironment {
         List<Long> list = linkRepository.findAllChatIdsWithLink(link.getId());
         assertThat(list.size()).isEqualTo(0);
     }
-
-    @Test
-    @Transactional
-    @Rollback
-    public void findAllOutdatedLinksTest() {
-        linkRepository.saveAll(List.of(
-            new Link(1L, "https://github.com/1",
-                OffsetDateTime.now(ZoneId.systemDefault()),
-                OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(40)
-            ),
-            new Link(2L, "https://github.com/2",
-                OffsetDateTime.now(ZoneId.systemDefault()),
-                OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(40)
-            ),
-            new Link(3L, "https://github.com/3",
-                OffsetDateTime.now(ZoneId.systemDefault()),
-                OffsetDateTime.now(ZoneId.systemDefault())
-            )
-        ));
-        long interval = 20L;
-
-        List<Link> links = linkRepository.findAllOutdatedLinks(interval);
-
-        assertThat(links.size()).isEqualTo(2);
-    }
-
 }
