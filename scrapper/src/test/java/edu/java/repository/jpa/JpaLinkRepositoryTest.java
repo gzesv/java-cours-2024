@@ -95,17 +95,19 @@ class JpaLinkRepositoryTest extends IntegrationEnvironment {
     @Transactional
     @Rollback
     public void findAllOutdatedLinksTest() {
-        linkRepository.save(new Link(1L, "https://github.com/1",
-            OffsetDateTime.now(ZoneId.systemDefault()),
-            OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(40)
-        ));
-        linkRepository.save(new Link(2L, "https://github.com/2",
-            OffsetDateTime.now(ZoneId.systemDefault()),
-            OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(40)
-        ));
-        linkRepository.save(new Link(3L, "https://github.com/3",
-            OffsetDateTime.now(ZoneId.systemDefault()),
-            OffsetDateTime.now(ZoneId.systemDefault())
+        linkRepository.saveAll(List.of(
+            new Link(1L, "https://github.com/1",
+                OffsetDateTime.now(ZoneId.systemDefault()),
+                OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(40)
+            ),
+            new Link(2L, "https://github.com/2",
+                OffsetDateTime.now(ZoneId.systemDefault()),
+                OffsetDateTime.now(ZoneId.systemDefault()).minusMinutes(40)
+            ),
+            new Link(3L, "https://github.com/3",
+                OffsetDateTime.now(ZoneId.systemDefault()),
+                OffsetDateTime.now(ZoneId.systemDefault())
+            )
         ));
         long interval = 20L;
 
