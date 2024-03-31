@@ -1,25 +1,21 @@
-package edu.java.services.jdbc;
+package edu.java.services.jpa;
 
 import edu.java.exception.ChatNotFoundException;
 import edu.java.exception.LinkNotFoundException;
 import edu.java.model.Link;
-import edu.java.repository.ChatToLinkRepository;
-import edu.java.repository.LinkRepository;
+import edu.java.repository.jpa.JpaLinkRepository;
 import edu.java.services.LinkService;
 import java.time.OffsetDateTime;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
-public class JdbcLinkService implements LinkService {
+public class JpaLinkService implements LinkService {
 
-    private final LinkRepository linkRepository;
+    private final JpaChatService chatService;
 
-    private final ChatToLinkRepository chatToLinkRepository;
-
-    private final JdbcChatService chatService;
+    private final JpaLinkRepository linkRepository;
 
     @Override
     @Transactional
@@ -28,7 +24,7 @@ public class JdbcLinkService implements LinkService {
             throw new ChatNotFoundException();
         }
 
-        return linkRepository.findAll(chatId);
+        return linkRepository.findAllByChatsId(chatId);
     }
 
     @Override
@@ -38,16 +34,15 @@ public class JdbcLinkService implements LinkService {
             throw new ChatNotFoundException();
         }
 
-        Optional<Link> linkByUrl = linkRepository.findLinkByUrl(link.getUrl());
+        Link linkByUrl = linkRepository.findByUrl(link.getUrl());
 
-        if (linkByUrl.isEmpty()) {
-            Link linkDb = linkRepository.add(link);
-            chatToLinkRepository.add(chatId, linkDb.getId());
-            return linkDb;
+        if (linkByUrl == null) {
+            linkByUrl = linkRepository.save(link);
         }
 
-        chatToLinkRepository.add(chatId, linkByUrl.get().getId());
-        return linkByUrl.get();
+        linkRepository.saveChatToLink(chatId, linkByUrl.getId());
+
+        return linkByUrl;
     }
 
     @Override
@@ -57,21 +52,19 @@ public class JdbcLinkService implements LinkService {
             throw new ChatNotFoundException();
         }
 
-        Optional<Link> linkByUrl = linkRepository.findLinkByUrl(link.getUrl());
+        Link linkByUrl = linkRepository.findByUrl(link.getUrl());
 
-        if (linkByUrl.isEmpty()) {
+        if (linkByUrl == null) {
             throw new LinkNotFoundException();
         }
 
-        long linkId = linkByUrl.get().getId();
+        linkRepository.deleteChatToLink(chatId, linkByUrl.getId());
 
-        chatToLinkRepository.remove(chatId, linkId);
-
-        if (isLinkTracked(linkId)) {
-            linkRepository.remove(linkId);
+        if (isLinkNotTracked(linkByUrl.getId())) {
+            linkRepository.delete(linkByUrl);
         }
 
-        return linkByUrl.get();
+        return linkByUrl;
     }
 
     @Override
@@ -80,11 +73,18 @@ public class JdbcLinkService implements LinkService {
     }
 
     @Override
+    @Transactional
     public void setUpdateAndCheckTime(long linkId, OffsetDateTime lastUpdateTime, OffsetDateTime lastCheckTime) {
-        linkRepository.setUpdateAndCheckTime(linkId, lastUpdateTime, lastCheckTime);
+        Link link = linkRepository.findById(linkId)
+            .orElseThrow(() -> new LinkNotFoundException());
+
+        link.setUpdateAt(lastUpdateTime);
+        link.setUpdateAt(lastUpdateTime);
+
+        linkRepository.save(link);
     }
 
-    private boolean isLinkTracked(long id) {
-        return chatToLinkRepository.findAllChatIdsWithLink(id).isEmpty();
+    private boolean isLinkNotTracked(long id) {
+        return linkRepository.findAllChatIdsWithLink(id).isEmpty();
     }
 }

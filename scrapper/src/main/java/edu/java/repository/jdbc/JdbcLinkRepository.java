@@ -1,7 +1,7 @@
-package edu.java.domain.repository;
+package edu.java.repository.jdbc;
 
-import edu.java.domain.LinkRepository;
 import edu.java.model.Link;
+import edu.java.repository.LinkRepository;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -20,10 +20,10 @@ public class JdbcLinkRepository implements LinkRepository {
     private static final String LINK_BY_URL = "SELECT * FROM link WHERE url = ?";
 
     private static final String LINKS_BY_CHAT_ID = """
-                    SELECT l.*
-                    FROM link l JOIN chat_to_link cl ON l.id = cl.link_id
-                    JOIN chat c ON c.id = cl.chat_id WHERE c.id = ?
-                    """;
+        SELECT l.*
+        FROM link l JOIN chat_to_link cl ON l.id = cl.link_id
+        JOIN chat c ON c.id = cl.chat_id WHERE c.id = ?
+        """;
 
     private static final String DELETE_FROM_LINK = "DELETE FROM link WHERE id = ?";
 

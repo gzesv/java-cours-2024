@@ -1,6 +1,7 @@
 package edu.java.domain.repository;
 
 import edu.java.model.Chat;
+import edu.java.repository.jdbc.JdbcChatRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
