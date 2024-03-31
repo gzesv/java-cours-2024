@@ -7,6 +7,7 @@ import edu.java.repository.jdbc.JdbcLinkRepository;
 import edu.java.scrapper.IntegrationEnvironment;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -40,14 +41,13 @@ class JdbcChatToLinkRepositoryTest extends IntegrationEnvironment {
         linkRepository.add(new Link(linkId, "https://github.com/1",
             OffsetDateTime.now(ZoneId.systemDefault()), OffsetDateTime.now(ZoneId.systemDefault())
         ));
+        Link link = linkRepository.findLinkByUrl("https://github.com/1").get();
 
-        chatToLinkRepository.add(chatId, linkId);
+        chatToLinkRepository.add(chatId, link.getId());
 
-        assertThat(client.sql("SELECT chat_id FROM chat_to_link WHERE chat_id=? AND link_id=?")
-            .params(chatId, linkId)
-            .query(Long.class)
-            .list())
-            .isNotEmpty();
+
+        List<Long> ids = chatToLinkRepository.findAllChatIdsWithLink(link.getId());
+        assertThat(ids).isNotEmpty();
     }
 
     @Test
