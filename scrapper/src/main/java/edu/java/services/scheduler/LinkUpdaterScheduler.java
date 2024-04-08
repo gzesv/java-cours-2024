@@ -1,6 +1,5 @@
 package edu.java.services.scheduler;
 
-import edu.java.client.bot.BotClient;
 import edu.java.dto.request.LinkUpdateRequest;
 import edu.java.services.scrapper.ScrapperService;
 import edu.java.services.updater.LinkUpdateService;

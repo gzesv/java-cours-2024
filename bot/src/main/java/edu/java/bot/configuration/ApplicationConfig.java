@@ -20,10 +20,10 @@ public record ApplicationConfig(
         String bootstrapServers,
 
         @NotEmpty
-        String keySerializer,
+        String keyDeserializer,
 
         @NotEmpty
-        String valueSerializer,
+        String valueDeserializer,
 
         @NotNull
         LinkUpdatesTopic linkUpdatesTopic,
