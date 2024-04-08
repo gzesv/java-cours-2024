@@ -3,6 +3,7 @@ package edu.java.client.bot;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import edu.java.dto.request.LinkUpdateRequest;
 import java.util.List;
+import edu.java.dto.response.LinkUpdateResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,7 +27,7 @@ class BotWebClientTest {
         server.start();
 
         BotClient client = new BotWebClient("http://localhost:" + server.port());
-        String actual = client.sendUpdate(new LinkUpdateRequest(
+        LinkUpdateResponse actual = client.sendUpdate(new LinkUpdateRequest(
             1L,
             "",
             "",
