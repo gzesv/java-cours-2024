@@ -1,6 +1,7 @@
 package edu.java.bot.configuration;
 
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
@@ -8,6 +9,40 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
     @NotEmpty
-    String telegramToken
+    String telegramToken,
+
+    @NotNull
+    Kafka kafka
+
 ) {
+    public record Kafka(
+        @NotEmpty
+        String bootstrapServers,
+
+        @NotEmpty
+        String keyDeserializer,
+
+        @NotEmpty
+        String valueDeserializer,
+
+        @NotNull
+        LinkUpdatesTopic linkUpdatesTopic,
+
+        @NotNull
+        DlqTopic dlqTopic
+    ) {
+        public record LinkUpdatesTopic(
+            @NotEmpty
+            String name,
+            @NotEmpty
+            String consumerGroupId
+        ) {
+        }
+
+        public record DlqTopic(
+            @NotEmpty
+            String name
+        ) {
+        }
+    }
 }

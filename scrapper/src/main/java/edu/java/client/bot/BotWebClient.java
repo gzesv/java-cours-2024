@@ -1,6 +1,7 @@
 package edu.java.client.bot;
 
 import edu.java.dto.request.LinkUpdateRequest;
+import edu.java.dto.response.LinkUpdateResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -19,12 +20,12 @@ public class BotWebClient implements BotClient {
     }
 
     @Override
-    public String sendUpdate(LinkUpdateRequest linkUpdateRequest) {
+    public LinkUpdateResponse sendUpdate(LinkUpdateRequest linkUpdateRequest) {
         return webClient.post()
             .uri(UPDATES_ENDPOINT)
             .bodyValue(linkUpdateRequest)
             .retrieve()
-            .bodyToMono(String.class)
+            .bodyToMono(LinkUpdateResponse.class)
             .block();
     }
 }

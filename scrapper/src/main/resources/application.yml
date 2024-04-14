@@ -4,6 +4,17 @@ app:
     interval: 10s
     force-check-delay: 10s
   database-access-type: jpa
+  use-queue: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    key-serializer: org.apache.kafka.common.serialization.StringSerializer
+    value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    link-updates-topic:
+      name: bot-link-update
+    dlq-topic:
+      name: bot-link-update-dlq
+      consumer-group-id: dlq-messages
 
 client-base-url:
   github: https://api.github.com
