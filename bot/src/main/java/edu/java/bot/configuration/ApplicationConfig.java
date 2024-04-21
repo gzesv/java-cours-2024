@@ -12,7 +12,10 @@ public record ApplicationConfig(
     String telegramToken,
 
     @NotNull
-    Kafka kafka
+    Kafka kafka,
+
+    @NotNull
+    Metrics metrics
 
 ) {
     public record Kafka(
@@ -44,5 +47,9 @@ public record ApplicationConfig(
             String name
         ) {
         }
+    }
+
+    public record Metrics(ProcessedUpdates processedUpdates) {
+        public record ProcessedUpdates(@NotEmpty String name, @NotEmpty String description) { }
     }
 }

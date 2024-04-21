@@ -9,6 +9,10 @@ app:
       consumer-group-id: update-messages
     dlq-topic:
       name: bot-link-update-dlq
+  metrics:
+    processed-updates:
+      name: processed_updates_count
+      description: count of processed messages
 
 spring:
   application:
@@ -25,3 +29,22 @@ springdoc:
 
 logging:
   config: classpath:log4j2-plain.xml
+
+management:
+  server:
+    port: 8091
+
+  endpoints:
+    web:
+      base-path: /
+      exposure:
+        include:
+          - info
+          - health
+          - prometheus
+      path-mapping:
+        prometheus: metrics
+
+  metrics:
+    tags:
+      application: ${spring.application.name}
